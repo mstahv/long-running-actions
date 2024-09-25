@@ -24,6 +24,7 @@ public class FrameworksActivityDialogView extends VerticalLayout {
             
             While this approach is very convenient for the developer, it has certain limitations.
 
+             * If the operation takes a really long time, the server (or some front-proxy) might time out the request.
              * The UX can't be optimal. The user might not understand why the loading indicator is shown
                 or what is happening, they might even go and reload the page when thinking the UI got stuck.
              * The progress indicator is not very informative. There is "some progress" in it, but in reality
@@ -35,14 +36,16 @@ public class FrameworksActivityDialogView extends VerticalLayout {
                or may not be a good thing).
             """));
 
-        add(new CodeSnippet(getClass(), 41, 45));
+        add(new CodeSnippet(getClass(), "framework"));
 
+        // CodeSnippet: framework
         add(new Button("Start 5000ms task", e -> {
             // This calling slow service method automatically shows frameworks loading indicator
             String result = slowService.slowBlockingMethod(5000);
             // Loading indicator is automatically closed after the execution is done
             Notification.show(result);
         }));
+        // CodeSnippetEnd: framework
 
     }
 }
