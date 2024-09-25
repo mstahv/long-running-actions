@@ -34,9 +34,10 @@ public class AsyncHelpers extends VerticalLayout {
 
         add(new RichText().withMarkDown("""
                 I admit, the amount of boilerplate code needed for a properly implemented asynchronous processing has made
-                me make compromises with the UX. To improve the situation, I baked together couple of helpers that can 
-                help you provide better UX with less code. The helpers are new kids on the block, so I'm eager to hear
-                your feedback or improvement ideas!
+                me make compromises with the UX. To improve the situation, I baked together couple of helpers to 
+                [Viritin](https://vaadin.com/directory/component/flow-viritin) (Maven "coordinates": 
+                *in.virit:viritin:2.9.0*) that can help you provide better UX with less code. The helpers are new kids 
+                on the block, so I'm eager to hear your feedback or improvement ideas!
                 
                 *PRO TIP: Don't hesitate to copy-paste the implementations to your project if you can't add a dependency to your project.*
                 
@@ -47,12 +48,14 @@ public class AsyncHelpers extends VerticalLayout {
                 forget everything about UI.access, server-push, etc.
                 """));
 
-        add(new CodeSnippet(getClass(), 53, 57));
+        add(new CodeSnippet(getClass(), "trivialActionButton"));
+        // CodeSnippet: trivialActionButton
         var trivialActionButton = new ActionButton<>("Run slow action", () -> slowService.generateStringAsync(3000));
         // The provided actions must NOT modify the UI (at least without the "usual UI.access ceremonies")!
         // Optional pre- and post-UI update hooks are provided for that purpose, here showing string returned from
         // the CompletableFuture in a notification
         trivialActionButton.setPostUiUpdate(str -> Notification.show(str));
+        // CodeSnippetEnd: trivialActionButton
         add(trivialActionButton);
 
         add(new RichText().withMarkDown("""
@@ -200,13 +203,15 @@ public class AsyncHelpers extends VerticalLayout {
                 """));
 
         add(new Paragraph("Instantiate UI future early, in a normal UI code; it locks itself to the current UI:"));
-        add(new CodeSnippet(getClass(), 210, 211));
+        add(new CodeSnippet(getClass(), "instantiatingUIFuture"));
         add(new Paragraph("Here we are using the most trivial API (Runnable). For the returned CompletableFuture, you" +
                 "can safely add UI modifications. Check full source code for Supplier and CompletableFuture examples."));
-        add(new CodeSnippet(getClass(), 228, 241));
+        add(new CodeSnippet(getClass(), "UIFutureRunnable"));
 
+        // CodeSnippet: instantiatingUIFuture
         // UI is tied with UI.getCurrent() when instantiated by default, but you can also explicitly provide it
         UIFuture uiFuture = new UIFuture();
+        // CodeSnippetEnd: instantiatingUIFuture
 
         // You can set the executor for the task, but most often not needed, JVM defaults are good for most cases
         // uiFuture.setExecutor(Executors.newSingleThreadExecutor());
@@ -223,6 +228,7 @@ public class AsyncHelpers extends VerticalLayout {
             Notification.show("Starting " + event.getValue().name() + "...");
             switch (event.getValue()) {
                 case Runnable:
+                    // CodeSnippet: UIFutureRunnable
                     uiFuture.runAsync(() -> {
                         // This is where you heavy lifting should be done, we'll be slacking for 3 seconds
                         try {
@@ -237,6 +243,7 @@ public class AsyncHelpers extends VerticalLayout {
                         // You can chain multiple UI update actions here, but DO NOT use the
                         // async version methods, or if you do, do the dance!
                     });
+                    // CodeSnippetEnd: UIFutureRunnable
                     break;
                 case Supplier:
                     // You can also supply a value for the UI update
