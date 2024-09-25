@@ -15,7 +15,7 @@ public class DefaultLayout extends MainLayout {
         return "}> & Slow Actions";
     }
 
-    private static final String baseSourceUrl = "https://github.com/mstahv/long-running-action/blob/main/src/main/java/%s.java";
+    private static final String baseSourceUrl = "https://github.com/mstahv/long-running-actions/blob/main/src/main/java/%s.java";
 
     @Override
     public void setContent(Component content) {
