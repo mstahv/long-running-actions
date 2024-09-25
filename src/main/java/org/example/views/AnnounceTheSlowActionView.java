@@ -38,10 +38,11 @@ public class AnnounceTheSlowActionView extends VerticalLayout {
                 still blocked *during the action* and UI events are not handled until the action is done.
                 """));
 
-        add(new CodeSnippet(getClass(), 46, 59));
+        add(new CodeSnippet(getClass(), "executeJsHack"));
 
         int componentIndex = getComponentCount();
         add(new Button("Run a slow action", e -> {
+            // CodeSnippet: executeJsHack
             ProgressBar progressBar = new ProgressBar();
             progressBar.setIndeterminate(true);
             addComponentAtIndex(componentIndex, progressBar);
@@ -54,18 +55,21 @@ public class AnnounceTheSlowActionView extends VerticalLayout {
                 Notification.show(result);
                 remove(progressBar);
             });
+            // CodeSnippetEnd: executeJsHack
         }));
 
-        add(new CodeSnippet(getClass(), 65, 71));
+        add(new CodeSnippet(getClass(), "vProgressBar"));
 
         var executionResults = new Div();
         add(executionResults);
         add(new Button("Run a slow action with VProgressBar", e -> {
+            // CodeSnippet: vProgressBar
             executionResults.add(VProgressBar.indeterminateForTask(() -> {
-                // The progressbar is visible during the task; framework indicator hidden
+                // The progressbar is visible only during this task; framework indicator hidden
                 String str = slowService.slowBlockingMethod(5000);
                 executionResults.add(new Paragraph(str));
             }).withMinWidth("100px"));
+            // CodeSnippetEnd: vProgressBar
         }));
 
     }

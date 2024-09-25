@@ -18,15 +18,23 @@ import org.vaadin.firitin.components.notification.VNotification;
 public class GoAsynchrounous extends VerticalLayout {
 
     public GoAsynchrounous(SlowService slowService) {
-        add(new H1("Asynchronous operation keeps the UI responsive"));
-        add(new CodeSnippet(getClass(), 25, 47));
-        add(new Button("Run slow async action", e -> {
+        add(new RichText().withMarkDown("""
+            # Asynchronous operation keeps the UI responsive
+            
+            For best possible UX, the UI should be responsive at all times. This means that the user should be able to 
+            interact with the UI even when the backend is busy executing some task. User might want to do something else
+            while waiting or even cancel the operation. This can be achieved by running the long running action in a
+            separate thread. Slightly more complicated to code, but way better user experience.
+            """));
+        add(new CodeSnippet(getClass(), "async"));
+        // CodeSnippet: async
+        Button button = new Button("Run slow async action", e -> {
             Notification.show("The will take some time, please hold...");
 
             e.getSource().getUI().ifPresent(ui -> {
                 // generateStringAsync returns a CompletableFuture<String> immediately and the UI is not blocked
                 slowService.generateStringAsync(5000).thenAccept(string -> {
-                    // This handler executed by a "non-UI thread" later when the string becomes available.
+                    // This handler executed by JDK a "non-UI thread", later, when the string becomes available.
                     // Touching UI components directly here would fail, and thus we need to use UI.access with another
                     // callback to update the UI
                     //
@@ -38,27 +46,31 @@ public class GoAsynchrounous extends VerticalLayout {
                     //
                     // TIP: from an AttachEvent you can get it without the ugly Optional.
                     ui.access(() -> {
-                        VNotification.prominent(string);
+                        Notification.show(string).setPosition(Notification.Position.MIDDLE);
+                        // re-enable the button, disableOnClick is on
+                        e.getSource().setEnabled(true);
                     });
                 });
             });
+        });
+        // Often you don't want developer to click the button twice, button can be disabled on click automatically
+        button.setDisableOnClick(true);
+        add(button);
+        // CodeSnippetEnd: async
+
+        add(new Button("It works?", e -> {
+            Notification.show("It works!");
         }));
 
         add(new RichText().withMarkDown("""
-                For best possible UX, the UI should be responsive at all times. This means that the user should be able to 
-                interact with the UI even when the backend is busy executing some task. User might want to do something else
-                while waiting or even cancel the operation. This can be achieved by running the long running action and
-                UI updates separately.
-
-                The example leaves the UI ready for any other actions while the long running task is executed. The user can
-                for example navigate to other views or initiate multiple long running tasks (Hint: use Button.setDisableOnClick
-                to prevent multiple clicks on the button, if not desired).
+                The example leaves the UI ready for any other actions while the long running task is executed. You can 
+                for example try the "It works?" button or even navigate to other views.
                 
                 Concurrency alone can be hard, especially with low level utilities like the Thread. Example on this page uses 
                 CompletableFuture (JDK's built-in abstraction to asynchronous processing) to get the value from long running 
                 action and updates the UI later when it is ready.
                 
-                *The concurrency needs to be handled also at the UI level!* In the previous blocking example the http 
+                *But the concurrency needs to be handled also at the UI level!* In the previous blocking example the http 
                 request was alive for the duration of the long action and the return message contained the changes. With 
                 asynchronous processing, the browser is not actively waiting for the response. Thus, the Vaadin 
                 application needs to have "server push" enabled or to use polling, to get the updates 
@@ -66,6 +78,8 @@ public class GoAsynchrounous extends VerticalLayout {
                 
                 You'll also need an additional measure to synchronize UI updates, which typically happens with the 
                 *UI.access(Runnable)* method, like in this example.
+                
+                The next example showcases some helper that can make asynchronous processing easier.
                 
                 ## Don't forget the user, you've got the power!
                 

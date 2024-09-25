@@ -21,7 +21,21 @@ public class FrameworksActivityDialogView extends VerticalLayout {
         add(new RichText().withMarkDown("""
             Vaadin Flow has built-in support for handling slow tasks in the UI. In case a server visit seems to
             take a lot fo time, the client-side will show a loading indicator.
-            
+            """));
+
+
+        add(new CodeSnippet(getClass(), "framework"));
+
+        // CodeSnippet: framework
+        add(new Button("Start 5000ms task", e -> {
+            // This calling slow service method automatically shows frameworks loading indicator
+            String result = slowService.slowBlockingMethod(5000);
+            // Loading indicator is automatically closed after the execution is done
+            Notification.show(result);
+        }));
+        // CodeSnippetEnd: framework
+
+        add(new RichText().withMarkDown("""
             While this approach is very convenient for the developer, it has certain limitations.
 
              * If the operation takes a really long time, the server (or some front-proxy) might time out the request.
@@ -35,17 +49,6 @@ public class FrameworksActivityDialogView extends VerticalLayout {
              * Some UI events are queued on the client side and executed after the long running task is completed (may 
                or may not be a good thing).
             """));
-
-        add(new CodeSnippet(getClass(), "framework"));
-
-        // CodeSnippet: framework
-        add(new Button("Start 5000ms task", e -> {
-            // This calling slow service method automatically shows frameworks loading indicator
-            String result = slowService.slowBlockingMethod(5000);
-            // Loading indicator is automatically closed after the execution is done
-            Notification.show(result);
-        }));
-        // CodeSnippetEnd: framework
 
     }
 }
