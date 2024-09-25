@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 /**
  * An example service that simulates slow some operations that are typical in real life projects.
- * This example is Vaadin agnostic and could exist.
+ * This example is Vaadin agnostic and could exist in any Java project.
  */
 @Service
 public class SlowService {
