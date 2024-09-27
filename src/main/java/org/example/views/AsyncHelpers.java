@@ -52,9 +52,9 @@ public class AsyncHelpers extends VerticalLayout {
         // CodeSnippet: trivialActionButton
         var trivialActionButton = new ActionButton<>("Run slow action", () -> slowService.generateStringAsync(3000));
         // The provided actions must NOT modify the UI (at least without the "usual UI.access ceremonies")!
-        // Optional pre- and post-UI update hooks are provided for that purpose, here showing string returned from
+        // Optional pre- and post-UI hooks are provided for that purpose, here showing string returned from
         // the CompletableFuture in a notification
-        trivialActionButton.setPostUiUpdate(str -> Notification.show(str));
+        trivialActionButton.setPostUiAction(str -> Notification.show(str));
         // CodeSnippetEnd: trivialActionButton
         add(trivialActionButton);
 
@@ -138,7 +138,7 @@ public class AsyncHelpers extends VerticalLayout {
             actionButton.setShowProgressBar(event.getValue());
         });
 
-        actionButton.setPreUiUpdate(() -> {
+        actionButton.setPreUiAction(() -> {
             // In this task one can modify UI, this task is optional
             if (showNotificationOnStart.getValue()) {
                 Notification.show("Starting the task...");
@@ -161,7 +161,7 @@ public class AsyncHelpers extends VerticalLayout {
                 actionButton.setShowProgressBar(builtInProgressbar.getValue());
             }
         });
-        actionButton.setPostUiUpdate(s -> {
+        actionButton.setPostUiAction(s -> {
             // In this task one can modify UI
             VNotification.prominent("Slow string:" + s);
             taskInProgressDialog.close();
