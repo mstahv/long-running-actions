@@ -36,7 +36,7 @@ public class AsyncHelpers extends VerticalLayout {
                 I admit, the amount of boilerplate code needed for a properly implemented asynchronous processing has made
                 me make compromises with the UX. To improve the situation, I baked together couple of helpers to 
                 [Viritin](https://vaadin.com/directory/component/flow-viritin) (Maven "coordinates": 
-                *in.virit:viritin:2.9.0*) that can help you provide better UX with less code. The helpers are new kids 
+                *in.virit:viritin:2.9.1*) that can help you provide better UX with less code. The helpers are new kids 
                 on the block, so I'm eager to hear your feedback or improvement ideas!
                 
                 *PRO TIP: Don't hesitate to copy-paste the implementations to your project if you can't add a dependency to your project.*
@@ -202,7 +202,7 @@ public class AsyncHelpers extends VerticalLayout {
                 Below you can see a simple demo and code example of triggering actions from a Select using UIFuture.
                 """));
 
-        add(new Paragraph("Instantiate UI future early, in a normal UI code; it locks itself to the current UI:"));
+        add(new Paragraph("Instantiate UiFuture early, in a normal UI code; it locks itself to the current UI:"));
         add(new CodeSnippet(getClass(), "instantiatingUIFuture"));
         add(new Paragraph("Here we are using the most trivial API (Runnable). For the returned CompletableFuture, you" +
                 "can safely add UI modifications. Check full source code for Supplier and CompletableFuture examples."));

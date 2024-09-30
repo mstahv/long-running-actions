@@ -28,14 +28,7 @@ public class AnnounceTheSlowActionView extends VerticalLayout {
                 want to hide or disable some UI components while the action is ongoing.
                             
                 A tiny problem is that Vaadin synchronises UI changes only after activated listeners are executed. 
-                This can be overcome by a tiny hack: an empty JS execution to cause an additional server roundtrip. 
-                Viritin's VProgressBar has a helper for this, which removes the code smell of the 
-                *getElement().executeJs("")* call from your application code, automatically removes the progressbar from
-                the UI when the action is finished and makes sure the frameworks built-in indicator is not shown (would 
-                look bit broken with two indicators).
-                            
-                I can already promise your users will be happier with this kind of tiny enhancements, but the UI updates are
-                still blocked *during the action* and UI events are not handled until the action is done.
+                This can be overcome by a tiny hack: an empty JS execution to cause an additional server round-trip.
                 """));
 
         add(new CodeSnippet(getClass(), "executeJsHack"));
@@ -58,6 +51,14 @@ public class AnnounceTheSlowActionView extends VerticalLayout {
             // CodeSnippetEnd: executeJsHack
         }));
 
+        add(new RichText().withMarkDown("""
+                Viritin's VProgressBar has a helper that...
+                
+                 * removes the code smell of the *getElement().executeJs("")* call from your application code. 
+                 * automatically removes the progressbar from the UI when the action is finished
+                 * .. and makes sure the frameworks built-in indicator is not shown (would look bit broken with two 
+                   indicators).
+                """));
         add(new CodeSnippet(getClass(), "vProgressBar"));
 
         var executionResults = new Div();
@@ -71,6 +72,11 @@ public class AnnounceTheSlowActionView extends VerticalLayout {
             }).withMinWidth("100px"));
             // CodeSnippetEnd: vProgressBar
         }));
+
+        add(new RichText().withMarkDown("""
+                I can already promise your users will be happier with this kind of tiny enhancements, but the UI updates are
+                still blocked *during the action* and UI events are not handled until the action is done.
+                """));
 
     }
 }

@@ -64,7 +64,7 @@ public class GoAsynchrounous extends VerticalLayout {
 
         add(new RichText().withMarkDown("""
                 The example leaves the UI ready for any other actions while the long running task is executed. You can 
-                for example try the "It works?" button or even navigate to other views.
+                for example try the "It works?" button or even navigate to other views while the action is running.
                 
                 Concurrency alone can be hard, especially with low level utilities like the Thread. Example on this page uses 
                 CompletableFuture (JDK's built-in abstraction to asynchronous processing) to get the value from long running 

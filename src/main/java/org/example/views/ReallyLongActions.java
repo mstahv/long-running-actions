@@ -1,31 +1,21 @@
 package org.example.views;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.router.Route;
 import org.example.AppWideTasks;
-import org.example.CodeSnippet;
 import org.example.DefaultLayout;
-import org.example.SlowService;
 import org.example.Task;
 import org.vaadin.firitin.appframework.MenuItem;
 import org.vaadin.firitin.components.RichText;
-import org.vaadin.firitin.components.button.ActionButton;
 import org.vaadin.firitin.components.button.UIFuture;
-import org.vaadin.firitin.components.checkbox.VCheckBox;
 import org.vaadin.firitin.components.grid.VGrid;
-import org.vaadin.firitin.components.notification.VNotification;
 import org.vaadin.firitin.components.progressbar.VProgressBar;
-import org.vaadin.firitin.fields.EnumSelect;
 import org.vaadin.firitin.layouts.HorizontalFloatLayout;
 
 import java.util.HashMap;
@@ -33,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 @Route(layout = DefaultLayout.class)
 @MenuItem(icon = VaadinIcon.CALENDAR_CLOCK, order = 1070)
@@ -52,11 +41,10 @@ public class ReallyLongActions extends VerticalLayout {
                 What it your actions can last longer than your sessions? If they are system wide, shared with others
                 and you session might close between? Then it depends, and this example simulates one solutions for
                 that kind of scenario. You'll essentially need to have some sort of API to know currently running
-                action and to subscribe to their results (and/or progress). The service in this example allows to 
-                subscribe for the result with CompletableFuture, so hooking to some UI action with UiFuture is 
-                rather easy. The demo hooks to currently running system wide tasks when arriving to the view
-                and registers to get notified when the task is done. By refreshing, you'll also see others's new
-                tasks and can subscribe to those as well. The service keeps at least one task running all the time.
+                actions and to subscribe to their results (and/or progress). The service in this example allows to 
+                hook for the result with a CompletableFuture based API, so hooking to some UI action with UiFuture is
+                rather easy. When arriving to the view you are automatically registered to currently running actions
+                and will get notified when they are done. The service keeps at least one task running all the time.
                 
                 Alternatively you could publish application wide events and listen to them in the UI. In this case
                 you would then be on your own with UI synchronization. Note, that e.g. Spring's events are synchronous
